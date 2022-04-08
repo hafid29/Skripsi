@@ -127,7 +127,7 @@
             <li class="treeview">
               <a href="#" class="nav-link" style="background-color:#CDF1CB;color:black;">
                 <i class="nav-icon fas fa-database"></i>
-                <p>&nbsp;<b>Learning SQL DML</b>
+                <p>&nbsp;<b>Learning SQL DDL</b>
                 </p>
               </a>
               <ul role="menu" class="nav nav-pills nav-sidebar flex-column">
