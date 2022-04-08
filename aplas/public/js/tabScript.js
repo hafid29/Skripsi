@@ -139,6 +139,7 @@
 
 /* Create CodeMirror TextEditor */
   function textEditorCM(){
+    console.log('nyoba');
 	// Merubah text area menjadi code mirror 
       var mainactivityTextarea = document.getElementById('MainActivity');
       var colorTextarea = document.getElementById('Color');
