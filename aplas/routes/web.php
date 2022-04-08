@@ -95,6 +95,8 @@ Route::patch('/student/results/valsub',['as' => 'results.valsub', 'uses' => 'Tas
 Route::resource('/student/jplasdown', 'JplasDownloadController');
 
   Route::resource('/student/uitasks', 'UiTopicStdController');
+  Route::resource('/student/uisqltask', 'UiTopicSqlController');
+  Route::resource('/student/uisqlshowtask', 'UiTopicSqlShowController');
   Route::get('student/uifeedback/{topic}', 'UiFeedbackController@create');
   Route::resource('/student/uifeedback', 'UiFeedbackController');
   Route::resource('/student/uiresview', 'UiStudentResultViewController');

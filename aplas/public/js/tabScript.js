@@ -139,6 +139,7 @@
 
 /* Create CodeMirror TextEditor */
   function textEditorCM(){
+	// Merubah text area menjadi code mirror 
       var mainactivityTextarea = document.getElementById('MainActivity');
       var colorTextarea = document.getElementById('Color');
       var stringTextarea = document.getElementById('String');
@@ -160,6 +161,8 @@
           hintOptions: {schemaInfo: activityTags}
       });
       activitycm.on('change', function(){if(localStorage.dataChanged != 'true'){localStorage.dataChanged = 'true'}activitycm.save();});
+
+	  // menampilan saran atau autocomplete yg bisa di geser ke atas/kebawah
       activitycm.on("keyup", function (cm, event) { // Active autocomplete when typing 
         if (!cm.state.completionActive && 
             (event.keyCode > 64 && event.keyCode < 91) || 
@@ -178,14 +181,15 @@
 
       // Replace Color TextArea With Code Mirror
       colorcm = CodeMirror.fromTextArea(colorTextarea, {
-        lineNumbers: true,
+        lineNumbers: true, // menampilkan nomer
         styleActiveLine: true,
-        mode: 'text/html',
-        theme: 'dracula',
+        mode: 'text/html', // text/x-mysql untuk mysql
+        theme: 'dracula', // tema 
         smartIndent: false,
         matchTags: {bothTags: true},
-        autoCloseTags: true
+        autoCloseTags: true // auto close tag ex: <b>Open tag|closed tag</b>
       });
+
       colorcm.on('change', function(){if(localStorage.dataChanged != 'true'){localStorage.dataChanged = 'true'}colorcm.save();});
       colorcm.setValue(`<?xml version="1.0" encoding="utf-8"?>
 <resources>
@@ -298,6 +302,13 @@ function replaceCode(activity, colors, strings) {
 }
 
 /*THIS BLOCK RUN FIRST 'Like Main()' */
+
+/*
+ * if you use jquery this method like $(document.ready){
+ * actual_code
+ * }
+ * */
+// load javascript saat halaman terbuka
   window.addEventListener('DOMContentLoaded', function(e) {
     this.textEditorCM();
     this.openTab('MainActivityTab','0');
