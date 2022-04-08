@@ -19,6 +19,6 @@ class SqlController extends Controller
      */
     public function index()
     {
-      return view('/sql/main');
+      return view('/student/uisqltask/index');
     }
 }

@@ -33,28 +33,18 @@
                         </thead>
                         <tbody>
 			    <?php $i = 1 ?>
-                            @foreach($entities as $entity)
                             <tr>
                                 <td class="text-center"><?php echo $i ?></td>
-                                <td>{{ $entity->{'name'} }}</td>
-                                <td>{{ $entity->{'description'} }}</td>
+                                <td>DDL</td>
+                                <td>Data Definition Language</td>
                                 <td class="text-center">
                                     <div class="btn-group">
-					@if ($entity->{'checkstat'})
 
-                                        <a class="btn btn-outline-warning" href="{{ URL::to('/student/uitasks/'.$entity->{'id'}) }}"><i class="fa fa-check"></i></a>
-
-                                        @else
-
-                                        <a class="btn btn-success" href="{{ URL::to('/student/uitasks/'.$entity->{'id'}) }}"><i class="fa fa-hand-pointer"></i></a>
-
-                                        @endif 
-
+                                        <a class="btn btn-success" href="{{ URL::to('student/uisqlshowtask') }}"><i class="fa fa-hand-pointer"></i></a>
                                     </div>
                                 </td>
                             </tr>
 			    <?php $i++ ?>
-                            @endforeach
                         </tbody>
                     </table>
                 </div>
