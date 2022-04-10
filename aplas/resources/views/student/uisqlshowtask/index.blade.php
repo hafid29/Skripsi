@@ -1,87 +1,319 @@
 @extends('student/home')
+
+<!-- untuk mengisi yield pada home.blade.php -->
+{{-- @section('script')
+    <script src="{{ URL::to('/js/tabScript.js') }}"></script>
+    <!-- Code Mirror Script & CSS -->
+    <script src="{{ URL::to('/js/lib/codemirror.js') }}"></script>
+    <script src="{{ URL::to('/js/mode/xml/xml.js') }}"></script>
+    <script src="{{ URL::to('/js/mode/active-line.js') }}"></script>
+    <script src="{{ URL::to('/js/addon/edit/matchtags.js') }}"></script>
+    <script src="{{ URL::to('/js/addon/edit/closetag.js') }}"></script>
+    <script src="{{ URL::to('/js/addon/fold/xml-fold.js') }}"></script>
+    <script src="{{ URL::to('/js/addon/hint/show-hint.js') }}"></script>
+    <script src="{{ URL::to('/js/addon/hint/xml-hint.js') }}"></script>
+    <link rel="stylesheet" href="{{ URL::to('/css/codemirror.css') }}">
+    <link rel="stylesheet" href="{{ URL::to('/css/dracula.css') }}">
+    <link rel="stylesheet" href="{{ URL::to('/js/addon/hint/show-hint.css') }}">
+
+    <!-- Code Mirror Script & CSS -->
+@endsection --}}
 @section('script')
-    <script src="{{ URL::to('/js/sql_code_textarea.js') }}"></script>
-    <!-- Code Mirror Script & CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.2/codemirror.min.css" />   
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/dracula.min.css"
-        integrity="sha512-gFMl3u9d0xt3WR8ZeW05MWm3yZ+ZfgsBVXLSOiFz2xeVrZ8Neg0+V1kkRIo9LikyA/T9HuS91kDfc2XWse0K0A=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="http://codemirror.net/lib/codemirror.css">
-    <link rel="stylesheet" href="http://codemirror.net/addon/hint/show-hint.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.2/codemirror.min.js"></script>
-    <script src="http://codemirror.net/lib/codemirror.js"></script>
-    <script src="http://codemirror.net/addon/edit/matchbrackets.js"></script>
-    <script src="http://codemirror.net/addon/edit/continuecomment.js"></script>
-    <script src="http://codemirror.net/mode/sql/sql.js"></script>
-    <script src="http://codemirror.net/addon/hint/show-hint.js"></script>
-    <script src="http://codemirror.net/addon/hint/sql-hint.js"></script>
-    <!-- Code Mirror Script & CSS -->
+    <!-- Code Ace Library For Python -->
+    <script src="{{ URL::to('/js/ace/ace/ace.js') }}"></script>
+
+    <!-- Code Ace Library For Python -->
 @endsection
+
 @section('content')
-    <div class="container">
-        <div class="row mt-3" style="position: relative;">
-            <div class="col-md-12">
-                <button class="btn btn-primary">
-                    <i class="fas fa-angle-left"></i> Previous</button>
-                <button class="btn btn-primary" style="position: absolute; right: 10px;">
-                    Next <i class="fas fa-angle-right"></i></button>
-            </div>
-        </div>
-        <div class="row mt-3">
-            <div class="col-md-12">
-                <h1>Pembelajaran</h1>
-                <table class="table table-hover">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th scope="col">No</th>
-                            <th scope="col">Task</th>
-                            <th scope="col">Description</th>
-                            <th scope="col">Score</th>
-                        </tr>
-                    </thead>
-                </table>
-            </div>
-        </div>
-        <div class="row justity-content-center mt-3">
+    <div class="row">
 
-            <div class="col-md-5" style="margin-top: 3.5%">
-                {{-- <textarea name="textareasql" id="textareasql" cols="30" rows="10"></textarea> --}}
+        <div class="col-12">
 
-                <div class="field">
-                    <fieldset class="form-group">
-                        <textarea name="textareasql" id="textareasql" rows="4" class="text-capitalize round form-control"
-                            placeholder="code sql"></textarea>
-                    </fieldset>
-                    <div>
-                        <button id="runButton" class="btn btn-success"><i class='fas fa-play'></i> Run</button>
-                        <button id="submitButton" class="btn btn-outline-primary"><i class="fas fa-check"></i>
-                            Submit</button>
+
+
+            {{ Form::open(['route' => 'uitasks.store', 'files' => true]) }}
+
+            <div class="card">
+
+                <div class="card-header">
+
+                    <h3 class="card-title">sql</h3>
+
+                </div>
+
+                <div class="card-body">
+
+
+
+                    <!-- pesan jika berhasil (session) -->
+
+                    @if (Session::has('message'))
+                        <div id="alert-msg" class="alert alert-success alert-dismissible">
+
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">�</button>
+
+                            {{ Session::get('message') }}
+
+                        </div>
+                    @endif
+
+
+
+                    <!-- pesan jika error (withErrors) -->
+
+                    @if (!empty($errors->all()))
+                        <div class="alert alert-danger alert-dismissible">
+
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">�</button>
+
+                            {{ Html::ul($errors->all()) }}
+
+                        </div>
+                    @endif
+
+
+                    <!-- kolom untuk overview materi pembelajaran -->
+
+                    <div class="form-group">
+
+                        <!--<label for="description">Note</label>-->
+
+                        <textarea id="desc" class="form-control" disabled rows="2"></textarea>
+
                     </div>
-                </div>
-                <div style="margin-top: 1%">
-                    <h2>Result</h2>
-                    <div>
-                        <button id="clearResult" class="btn btn-danger" style="position: relative;left:68%">
-                            <i class='fas fa-trash'></i> Clear
-                        </button>
+
+
+                    <div class="button-group">
+
+
+                        <!-- jika sudah sampai topic terakhir, next button dinonaktifkan -->
+
+                        <input type="button" value="Next" class="float-right mr-1 btn btn-outline-primary"
+                            style="min-width: 120px; min-height: 45px;" disabled>
+
+                        <!-- back button -->
+                        <input type="button" id="compile" value="Compile Program" class="float-right mr-1 btn btn-success"
+                            style="min-width: 120px; min-height: 45px;">
+                        <input type="button" value="Previous" class="mx-1 btn btn-outline-primary"
+                            style="min-width: 120px; min-height: 45px;">
+
+
+
+                        <!-- feedback button -->
+                        <a class="float-right mr-1 btn btn-primary" type="button"
+                            style="padding: 8px; min-width: 120px; min-height: 45px; color:white;"><i class="fa fa-heart"
+                                aria-hidden="true"></i> Feedback</a>
+
                     </div>
-                    <textarea name="body" id="text-editor" cols="50" rows="10"></textarea>
+
+
+
+                    <div class="row" style="padding-top:20px">
+
+                        <div id="left-panel" class="col-md-6">
+
+                            <div class="code-box-container"
+                                style="box-shadow: 0 2px 5px 0 rgba(62, 64, 68, 0.5);height: 684px; width:100%;border-radius:5px; border-style:solid; border-width:4px; border-color: #E1E1E8;">
+
+                                <div>
+
+                                    <embed class="guide-reader" style="height: 636px; width:100%;margin-bottom: -4px;"
+                                        type="application/pdf" src="{{ asset('lte/dist/file/modul.pdf') }}">
+                                    </embed>
+
+                                </div>
+
+                                <div class="mb-0 nav nav-justified btn-group">
+
+                                    <tr>
+
+                                        <!--  button download pdf -->
+
+                                        <td>
+                                            <a class="btn btn-success" style="border-radius:0px" href="" target="_blank">
+                                                <i class="fa fa-download"></i>&nbsp;Download Guide</a>
+
+                                        </td>
+
+                                    </tr>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <div id="right-panel" class="col-md-6">
+
+                            <div class="code-box-container"
+                                style="box-shadow: 0 2px 5px 0 rgba(62, 64, 68, 0.5); border-radius:5px; border-style:solid; border-width:4px; border-color: #E1E1E8;">
+
+                                <div class="mb-0 nav nav-justified btn-group">
+
+                                    <tr>
+
+                                        <!-- switch button menggunakan js -->
+
+                                        <td>
+
+                                            <input id="MainActivityTab" type="button" value="mysql.php"
+                                                class="btn btn-secondary tab-box rounded-0 font-italic"
+                                                onclick="openTab('MainActivityTab','0')"></input>
+
+                                        </td>
+
+
+
+                                    </tr>
+
+                                </div>
+
+
+
+                                <!-- Textarea pengerjaan -->
+
+                                <textarea name="MainActivity" id="MainActivity" class="code-box" style="padding: 20px; height: 100px;"></textarea>
+
+
+
+                                {{-- <textarea name="Color" id="Color" class="w-100 code-box"
+                                    style="display:none; padding: 20px; height: 93%;">color box</textarea>
+
+
+
+                                <textarea name="String" id="String" class="w-100 code-box"
+                                    style="display:none; padding: 20px; height: 93%;">string box</textarea> --}}
+                                <!-- Text pengerjaan -->
+                                <div style="height: 400px; border-right: 1px solid #e0e0e0" id="editor"></div>
+                                <!-- End Text Pengerjaan -->
+
+                                <div class="mb-0 nav nav-justified btn-group">
+                                    <tr>
+
+                                        <!-- switch button menggunakan js -->
+
+                                        <td>
+                                            <a class="btn btn-secondary tab-box rounded-0 font-italic"
+                                                style="border-radius:0px; color:white;" onclick="orientationbutton()">
+
+                                                <i class="fa fa-retweet"></i>&nbsp;Change orientation</a>
+                                        </td>
+
+                                    </tr>
+
+                                </div>
+                                {{-- <div class="mb-0 nav nav-justified btn-group">
+                                    <tr>
+
+                                        <!-- switch button menggunakan js -->
+
+                                        <td>
+                                            <a class="btn btn-secondary tab-box rounded-0 font-italic"
+                                                style="border-radius:0px; color:white;" onclick="orientationbutton()">
+
+                                                <i class="fa fa-retweet"></i>&nbsp;Change orientation</a>
+                                        </td>
+
+                                    </tr>
+
+                                </div> --}}
+
+                                <!-- data 'id' untuk UiTopicStdController -->
+
+                                <input name="id" type="hidden" value={{ ['id'] }}></input>
+
+
+
+                            </div>
+
+                        </div>
+
+
+
+                    </div>
+
                 </div>
-                <div class="button-box mt-2" style="position: absolute; right: 10px;">
+
+
+
+
+
+
+
+                <div class="col-12" style="padding-top:20px;padding-right:20px;padding-left:20px;">
+
+                    <h1>Result</h1>
+
+                    <p style="color: #ea5a73; font-size:larger">(After Trying {{ $numberOfTries }} Times)</p>
+
+                    <table class="table table-bordered table-hover">
+
+                        <thead>
+
+                            <tr class="text-center">
+
+                                <th>Submit No.</th>
+
+                                <th>Topic Name</th>
+
+                                <th>Validation Detail</th>
+
+                                <th>Status</th>
+
+                                <th>Action</th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="table-body">
+
+
+                        </tbody>
+
+                    </table>
+
                 </div>
+
+                <!-- </form> -->
+
+
             </div>
-            <div class="col-md-7" style="position: relative;">
-                <embed src="{{ asset('lte/dist/file/modul.pdf') }}" type="application/pdf"
-                    style="width: 100%; height: 100%;">
-            </div>
+
         </div>
-        <div class="row mt-3" style="position: relative;">
-            <div class="col-md-12">
-                <button class="btn btn-primary">
-                    <i class="fas fa-angle-left"></i> Previous</button>
-                <button class="btn btn-primary">
-                    Next <i class="fas fa-angle-right"></i></button>
-            </div>
-        </div>
-    </div>
-@endsection
+        <script>
+            let editor;
+
+            window.onload = function() {
+                editor = ace.edit("editor");
+                // tampilan tema warna editor
+                editor.setTheme("ace/theme/clouds_midnight");
+                // editor.setTheme("ace/theme/clouds");
+                editor.session.setMode("ace/mode/python");
+                editor.setFontSize("12px");
+
+                editor.setValue(`
+    '''
+    Dika saat ini mengalami masalah dompet keuangan, bantu dika untuk mempersiapkan 
+    pembayaran apabila caffe yang didatangi ternyata menggunakan nontunai maka, dika harus
+    menggunakan debit. Namun apabila hanya melayani nontunai, maka harus menggunakan 
+    tunai.
+    
+    
+    1. Apabila cashless : output yang diharapkan "debit"
+    2. Apabila tunai     : output yang diharapkan "tunai"
+    
+    
+    Requirement syntax : 
+    if  |   print   |   variable
+    
+    '''
+    
+    # status pembayaran terkini
+    metode_pembayaran = "tunai"`);
+
+            }
+        </script>
+    @endsection
