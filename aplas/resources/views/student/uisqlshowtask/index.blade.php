@@ -1,6 +1,6 @@
 @extends('student/home')
 @section('script')
-    <script src="{{ URL::to('/js/sql_code_textarea.js') }}"></script>
+    {{-- <script src="{{ URL::to('/js/sql_code_textarea.js') }}"></script> --}}
     <!-- Code Mirror Script & CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.2/codemirror.min.css" />   
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/dracula.min.css"
@@ -53,7 +53,7 @@
                             placeholder="code sql"></textarea>
                     </fieldset>
                     <div>
-                        <button id="runButton" class="btn btn-success"><i class='fas fa-play'></i> Run</button>
+                        <button type="button" onclick="_onClick()" class="btn btn-success"><i class='fas fa-play'></i> Run</button>
                         <button id="submitButton" class="btn btn-outline-primary"><i class="fas fa-check"></i>
                             Submit</button>
                     </div>
@@ -65,7 +65,7 @@
                             <i class='fas fa-trash'></i> Clear
                         </button>
                     </div>
-                    <textarea name="body" id="text-editor" cols="50" rows="10"></textarea>
+                    <textarea name="result" id="result" cols="50" rows="10"></textarea>
                 </div>
                 <div class="button-box mt-2" style="position: absolute; right: 10px;">
                 </div>
@@ -84,4 +84,29 @@
             </div>
         </div>
     </div>
+    <script>
+        var textareaSql = document.getElementById("textareasql");
+        var editor = CodeMirror.fromTextArea(textareaSql, {
+            lineNumbers: true, // menampilkan nomer
+            styleActiveLine: true,
+            mode: "text/x-sql", // text/x-mysql untuk mysql
+            theme: "dracula", // tema
+            smartIndent: true,
+            matchTags: { bothTags: true },
+            autoCloseTags: true, // auto close tag ex: <b>Open tag|closed tag</b>
+            indentWithTabs: true,
+            matchBrackets: true,
+            autofocus: true,
+            extraKeys: { "Ctrl-Space": "autocomplete" },
+            hintOptions: {
+                tables: {
+                    users: { name: null, score: null, birthDate: null },
+                    countries: { name: null, population: null, size: null },
+                },
+            },
+        });
+        function _onClick() {
+            document.getElementById("result").value = editor.getValue();
+        }
+    </script>
 @endsection
