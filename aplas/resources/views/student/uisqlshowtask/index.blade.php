@@ -5,9 +5,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.2/codemirror.min.css" />   
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/dracula.min.css"
         integrity="sha512-gFMl3u9d0xt3WR8ZeW05MWm3yZ+ZfgsBVXLSOiFz2xeVrZ8Neg0+V1kkRIo9LikyA/T9HuS91kDfc2XWse0K0A=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+	crossorigin="anonymous" referrerpolicy="no-referrer" />
+
     <link rel="stylesheet" href="http://codemirror.net/lib/codemirror.css">
     <link rel="stylesheet" href="http://codemirror.net/addon/hint/show-hint.css">
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.2/codemirror.min.js"></script>
     <script src="http://codemirror.net/lib/codemirror.js"></script>
     <script src="http://codemirror.net/addon/edit/matchbrackets.js"></script>
@@ -61,11 +63,14 @@
                 <div style="margin-top: 1%">
                     <h2>Result</h2>
                     <div>
-                        <button id="clearResult" class="btn btn-danger" style="position: relative;left:68%">
+			<button id="clearResult"
+			onclick = "_handleClickClear()"
+			 class="btn btn-danger" 
+			style="position: relative;left:68%">
                             <i class='fas fa-trash'></i> Clear
                         </button>
                     </div>
-                    <textarea name="result" id="result" cols="50" rows="10"></textarea>
+                    <textarea name="result" id="result" cols="50" rows="10">test value</textarea>
                 </div>
                 <div class="button-box mt-2" style="position: absolute; right: 10px;">
                 </div>
@@ -104,9 +109,29 @@
                     countries: { name: null, population: null, size: null },
                 },
             },
-        });
-        function _onClick() {
-            document.getElementById("result").value = editor.getValue();
-        }
+	});
+	// click handler for button sql run
+	function _onClick() {
+
+	   axios({
+		method:'POST',
+		url:"/api/executor/sql/",
+		data: JSON.parse(
+			JSON.stringify({
+				query: editor.getValue()
+			})
+		)
+	}).then( res => {
+const strJson = JSON.stringify(res.data.data)
+console.log(strJson)
+		 document.getElementById("result").value = strJson;
+}).catch( err => {
+		document.getElementById("result").value = err.response.data.message;
+	})
+
+	   	}
+	function _handleClickClear() {
+		document.getElementById("result").value =""
+	}
     </script>
 @endsection

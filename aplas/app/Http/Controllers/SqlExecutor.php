@@ -60,16 +60,24 @@ class SqlExecutor extends Controller {
 		}
 		try {
 			// enable query log
-			\DB::enableQueryLog();
+			\DB::connection()->enableQueryLog();
 			$jsonQueryStr = json_encode($request->json()->all(),TRUE);
 			$decodeJSON = json_decode($jsonQueryStr);
 
 			$query = \DB::select($decodeJSON->query);
-			dd(\DB::getQueryLog());
-			return $this->jsonReturner("Run",200,$query);
-		} catch (Exception $e) {
-			dd($e);
-				return $this->jsonReturner("error",200,$e);
+			$queryLog = \DB::getQueryLog();
+//		var_dump($queryLog[0]['time']);
+			return $this->jsonReturner("Run",200,array(
+				"message" => "Query OK",
+				"execute_time" => $queryLog[0]['time'],
+				"result" => $query
+			));
+		} catch (Exception $e) {	
+		
+			return $this->jsonReturner($e->getMessage(),400,array(
+				"sql_err_code" => $e->getCode(),
+				"message" => $e->getMessage()
+			));
 			}
 		
 
